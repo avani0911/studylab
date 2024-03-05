@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stack Quiz</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f3f3f3;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            text-align: left;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        h1 {
+            color: #93332e;
+            margin-bottom: 20px;
+        }
+
+        .quiz-question {
+            margin-bottom: 20px;
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        button {
+            padding: 12px 20px;
+            background-color: #93332e;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #93332e;
+        }
+
+        .result {
+            margin-top: 20px;
+        }
+
+        .highlight-correct {
+            background-color: #49e949;
+        }
+
+        .highlight-wrong {
+            background-color: #Fa0000;
+        }
+
+        #nextBtn {
+            margin-top: 15px;
+        }
+
+        /* Additional Styles */
+        .chart-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        #myChart {
+            display: none;
+        }
+
+        #attemptAgainBtn,
+        #goBackBtn {
+            display: none;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Stack Quiz</h1>
+        <div id="quiz" class="quiz-question"></div>
+        <div class="quiz-options" id="quiz-options"></div>
+        <button onclick="nextQuestion()" id="nextBtn" style="display: none;">Next Question</button>
+        <div class="result" id="result"></div>
+
+        <!-- Chart Container -->
+        <div class="chart-container">
+            <canvas id="myChart" width="400" height="400"></canvas>
+        </div>
+
+        <!-- Attempt Again and Go Back Buttons -->
+        <button id="attemptAgainBtn" onclick="attemptQuizAgain()">Attempt Quiz Again</button>
+        <button id="goBackBtn" onclick="goBack()">Go Back</button>
+    </div>
+
+    <script>
+        const quizData = [
+            {
+                question: 'What is a stack?',
+                options: ['A linear data structure', 'A hierarchical data structure', 'A non-linear data structure', 'A random data structure'],
+                correctAnswer: 'A linear data structure'
+            },
+            {
+                question: 'Which operation adds an element to the top of the stack?',
+                options: ['Push', 'Pop', 'Peek', 'Size'],
+                correctAnswer: 'Push'
+            },
+            {
+                question: 'What happens when you try to pop from an empty stack?',
+                options: ['Stack underflow', 'Stack overflow', 'No change', 'Program crashes'],
+                correctAnswer: 'Stack underflow'
+            },
+            {
+                question: 'In a stack, the element that was added last is removed first. This is known as:',
+                options: ['FIFO', 'LIFO', 'FILO', 'LILO'],
+                correctAnswer: 'LIFO'
+            },
+            {
+                question: 'Which of the following is not a standard stack operation?',
+                options: ['Push', 'Pop', 'Remove', 'Peek'],
+                correctAnswer: 'Remove'
+            },
+            {
+                question: 'What is the time complexity of the push operation in a stack?',
+                options: ['O(1)', 'O(log n)', 'O(n)', 'O(n^2)'],
+                correctAnswer: 'O(1)'
+            },
+            {
+                question: 'Which data structure uses the Last In First Out (LIFO) principle?',
+                options: ['Queue', 'Linked List', 'Stack', 'Tree'],
+                correctAnswer: 'Stack'
+            },
+            {
+                question: 'Which of the following is an example of a real-world stack?',
+                options: ['Undo feature in software', 'Queue at a bus stop', 'Array in programming', 'Linked list'],
+                correctAnswer: 'Undo feature in software'
+            },
+            {
+                question: 'What is the space complexity of a stack?',
+                options: ['O(1)', 'O(log n)', 'O(n)', 'O(n^2)'],
+                correctAnswer: 'O(n)'
+            },
+            {
+                question: 'Which of the following algorithms uses a stack?',
+                options: ['Binary Search', 'Depth-First Search', 'Breadth-First Search', 'Merge Sort'],
+                correctAnswer: 'Depth-First Search'
+            },
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+        const quizContainer = document.getElementById('quiz');
+        const optionsContainer = document.getElementById('quiz-options');
+        const resultContainer = document.getElementById('result');
+        const nextButton = document.getElementById('nextBtn');
+        const attemptAgainButton = document.getElementById('attemptAgainBtn');
+        const goBackButton = document.getElementById('goBackBtn');
+        let myChart; // Variable to hold the chart instance
+
+        function loadQuestion() {
+            const currentQuestion = quizData[currentQuestionIndex];
+            quizContainer.textContent = currentQuestion.question;
+            optionsContainer.innerHTML = '';
+            currentQuestion.options.forEach((option, index) => {
+                const optionButton = document.createElement('button');
+                optionButton.textContent = option;
+                optionButton.addEventListener('click', () => checkAnswer(option));
+                optionsContainer.appendChild(optionButton);
+            });
+        }
+
+        function checkAnswer(selectedOption) {
+            const currentQuestion = quizData[currentQuestionIndex];
+            const options = optionsContainer.getElementsByTagName('button');
+
+            for (let i = 0; i < options.length; i++) {
+                options[i].disabled = true;
+                if (options[i].textContent === currentQuestion.correctAnswer) {
+                    options[i].classList.add('highlight-correct');
+                } else if (options[i].textContent === selectedOption) {
+                    options[i].classList.add('highlight-wrong');
+                }
+            }
+
+            if (selectedOption === currentQuestion.correctAnswer) {
+                score++;
+            }
+
+            nextButton.style.display = 'block';
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < quizData.length) {
+                resetOptions();
+                loadQuestion();
+                nextButton.style.display = 'none';
+            } else {
+                showResult();
+            }
+        }
+
+        function showResult() {
+            resultContainer.textContent = `Quiz completed! Your Score: ${score}/${quizData.length}`;
+
+            // Create a pie chart
+            const ctx = document.getElementById('myChart').getContext('2d');
+            myChart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: ['Correct', 'Incorrect'],
+                    datasets: [{
+                        data: [score, quizData.length - score],
+                        backgroundColor: ['#8FEE8F', '#FF8F8F']
+                    }]
+                }
+            });
+
+            // Show chart and buttons
+            document.getElementById('myChart').style.display = 'block';
+            attemptAgainButton.style.display = 'block';
+            goBackButton.style.display = 'block';
+        }
+
+        function resetOptions() {
+            const options = optionsContainer.getElementsByTagName('button');
+            for (let i = 0; i < options.length; i++) {
+                options[i].classList.remove('highlight-correct', 'highlight-wrong');
+                options[i].disabled = false;
+            }
+        }
+
+        function attemptQuizAgain() {
+            // Hide chart and buttons
+            document.getElementById('myChart').style.display = 'none';
+            attemptAgainButton.style.display = 'none';
+            goBackButton.style.display = 'none';
+
+            // Reset quiz variables
+            currentQuestionIndex = 0;
+            score = 0;
+            resetOptions();
+
+            // Remove previous chart if it exists
+            if (myChart) {
+                myChart.destroy();
+            }
+
+            // Load the first question
+            loadQuestion();
+
+            // Hide result text
+            resultContainer.textContent = '';
+        }
+
+        function goBack() {
+            // Redirect to the previous page
+            window.location.href = 'quizes.html'; // Replace with the actual URL
+        }
+
+        // Initial load
+        loadQuestion();
+    </script>
+</body>
+</html>

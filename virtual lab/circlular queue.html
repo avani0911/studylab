@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Circular Queue Implementation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f3f3f3;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            text-align: center;
+            max-width: 800px; /* Increased max-width */
+            width: 100%;
+        }
+
+        h1 {
+            color: #93332e;
+            margin-bottom: 20px;
+        }
+        nav {
+        box-shadow: 0 20px 0px 0 #dc3545;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        height: 100px;
+        background-color: #93332e;
+      }
+      .left {
+        font-size: 40px;
+      }
+      nav ul {
+        display: flex;
+        justify-content: center;
+      }
+      nav ul li {
+        list-style: none;
+        margin: 0 25px;
+      }
+      nav ul li a {
+        text-decoration: none;
+        color: white;
+      }
+      nav ul li a:hover {
+        color: #cdc2ae;
+        
+      }
+      ul li ul.dropdown li{
+        padding-top: 10px;
+        padding-bottom: 10px;
+        font-size: 25px;
+        display: block;
+      }
+      ul li ul.dropdown{
+        width: 250px;
+        background: #bb433c;
+        position: absolute;
+        min-width: 160px;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        padding-left: 10px;
+        padding-top: 10px;
+        padding-right: 20px;
+        padding-bottom: 10px;
+        z-index: 1;
+        display: none;
+        
+      }
+      .dropdown a:hover{
+        color: #93332e;
+        background-color: cornsilk;
+        display: block;
+        width: 100%;
+        padding:10px;
+      }
+      ul li a:hover{
+        font-size: 25px;
+      }
+      ul li:hover ul.dropdown{
+        display: block;
+      }
+      .dropdown hr{
+        color: cornsilk;
+      }
+
+        .queue {
+            position: relative;
+            width: 300px; /* Adjust as needed */
+            height: 300px; /* Adjust as needed */
+            margin: 0 auto;
+            overflow: hidden; /* Added overflow: hidden */
+        }
+
+        .queue-element {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: #93332e;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 20px;
+            transition: transform 0.5s ease-in-out; /* Adjusted transition */
+        }
+
+        .button-container {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        input[type="text"] {
+            padding: 10px;
+            border: 2px solid #93332e;
+            border-radius: 5px;
+            width: 150px;
+        }
+
+        button {
+            padding: 12px 20px;
+            background-color: #93332e;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #dc3545;
+        }
+
+        .action-text {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #93332e;
+        }
+
+        .instruction-box {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f0f0f0;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            text-align: left;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .instruction {
+            margin-bottom: 5px;
+            color: #555;
+        }
+    </style>
+</head>
+<header>
+    <nav>
+        <div class="left" style="color:white">Study Lab</div>
+        <div class="right">
+          <ul>
+            <li><a href="#home">Home</a></li>
+            <li><a href="./book.html">Books</a></li>
+            <li><a href="#">Labs</a>
+            <ul class="dropdown">
+              <li><a href="lab.html">Stacks</a></li>
+              <hr>
+              <li><a href="queuetheory.html">Queue</a></li>
+              <hr>
+              <li><a href="circular queue theory.html">Circular Queue</a></li>
+              <hr>
+              <li><a href="#">Trees</a></li>
+              <hr>
+              <li><a href="quizes.html">Quizes</a></li>
+              <hr>
+              <li><a href="#">Feedback</a></li>
+              </ul>
+            </li>
+            <li><a href="#cu">Contact Us</a></li>
+          </ul>
+        </div>
+      </nav>
+</header>
+<body>
+    <div class="container">
+        <h1>Circular Queue Implementation</h1>
+        <div class="queue" id="queue">
+            <!-- Queue elements will be dynamically added here -->
+        </div>
+        <div class="button-container">
+            <input type="text" id="element-input" placeholder="Element to enqueue">
+            <button onclick="enqueue()">Enqueue</button>
+            <button onclick="dequeue()">Dequeue</button>
+        </div>
+        <div class="action-text" id="action-text"></div>
+        <div class="instruction-box" id="instruction-box"></div>
+    </div>
+
+    <script>
+        const queue = [];
+        const maxQueueSize = 8; // Adjust as needed
+        const queueElement = document.getElementById('queue');
+        const actionText = document.getElementById('action-text');
+        const instructionBox = document.getElementById('instruction-box');
+
+        function updateQueueDisplay() {
+            queueElement.innerHTML = '';
+            const angleStep = (2 * Math.PI) / maxQueueSize;
+            for (let i = 0; i < maxQueueSize; i++) {
+                const angle = i * angleStep;
+                const radius = 100; // Adjust as needed
+                const x = 150 + radius * Math.cos(angle); // Adjust as needed
+                const y = 150 + radius * Math.sin(angle); // Adjust as needed
+                const queueIndex = (i + queue.length) % maxQueueSize;
+                const queueElementValue = queue[queueIndex];
+                const queueElementDiv = document.createElement('div');
+                queueElementDiv.classList.add('queue-element');
+                queueElementDiv.innerText = queueElementValue || '-';
+                queueElementDiv.style.left = x + 'px';
+                queueElementDiv.style.top = y + 'px';
+                queueElement.appendChild(queueElementDiv);
+                setTimeout(() => {
+                    queueElementDiv.style.transform = 'scale(1)'; // Reset transform after animation
+                }, 100);
+            }
+        }
+
+        function enqueue() {
+            const elementInput = document.getElementById('element-input').value;
+            if (elementInput.trim() === '') {
+                alert('Please enter an element.');
+                return;
+            }
+            if (queue.length >= maxQueueSize) {
+                actionText.innerText = 'Queue is full. Dequeue an element first.';
+                return;
+            }
+            queue.push(elementInput);
+            updateQueueDisplay();
+            actionText.innerText = `Enqueued ${elementInput}.`;  // Corrected backticks
+            document.getElementById('element-input').value = '';
+            addInstruction(`Enqueued ${elementInput}.`);
+        }
+
+        function dequeue() {
+            if (queue.length === 0) {
+                actionText.innerText = 'Queue is empty. Cannot dequeue.';
+                return;
+            }
+            const dequeuedElement = queue.shift();
+            updateQueueDisplay();
+            actionText.innerText = `Dequeued ${dequeuedElement}.`;  // Corrected backticks
+            addInstruction(`Dequeued ${dequeuedElement}.`);
+        }
+
+        function addInstruction(instruction) {
+            const instructionElement = document.createElement('div');
+            instructionElement.classList.add('instruction');
+            instructionElement.innerText = instruction;
+            instructionBox.appendChild(instructionElement);
+        }
+    </script>
+</body>
+</html>

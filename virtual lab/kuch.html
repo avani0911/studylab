@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Yeseva+One&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@1,600&display=swap" rel="stylesheet">
+    <style>
+        .box {
+            background-color: rgba(123, 37, 37, 0.941);
+            color: rgb(242, 235, 222);
+            width: 80%;
+            min-width: 400px;
+            height: 400px;
+            flex-direction: column;
+            align-items: center;
+            top: 100%; 
+            border-radius: 20px;
+        }
+
+        .box .quote {
+            padding-left: 50px;
+            font-size: 27px;
+            font-family: 'Libre Baskerville', serif;
+            max-width: 400px;
+            overflow: hidden;
+        }
+
+        .box .reg {
+            font-size: 30px;
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            left: 70%;
+            transform: translateX(-50%);
+        }
+
+        .para {
+            font-size: 27px;
+            font-family: "Yeseva One", serif;
+            align-items: center;
+            padding-left: 10%;
+            animation: slide-in-text 1.5s ease-out;
+        }
+
+        .reg a {
+            color: powderblue;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-image: url('./Untitled\ design.png');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            animation: slide-in-anim 1.5s ease-out;
+        }
+
+        #imagee {
+            position: absolute;
+            top: 8%;
+            left: 28.7%;
+            width: 475px;
+            transform: translate(-50%, 50%);
+            border-radius: 40% 80% 52% 74% / 50% 16% 42%;
+        }
+
+        .regdet {
+            padding-left: 50%;
+            top: 0%;
+        }
+
+        label {
+            padding: 10px;
+        }
+
+        input[type=text], input[type=password] {
+            width: 80%;
+            padding: 7px;
+            margin: 5px 0 12px 0;
+            display: inline-block;
+            border: none;
+            background: #f1f1f1;
+            margin-right: 16px;
+        }
+
+        input[type=text]:focus, input[type=password]:focus {
+            background-color: #ddd;
+            outline: none;
+        }
+
+        button {
+            background-color: #04AA6D;
+            color: white;
+            padding: 10px 10px;
+            margin: 8px 0;
+            border: none;
+            cursor: pointer;
+            width: 20%;
+            opacity: 0.9;
+            left: 50%;
+        }
+
+        button:hover {
+            opacity: 1;
+        }
+
+        @keyframes slide-in-anim {
+            0% {
+                transform: translateY(100%);
+            }
+            100% {
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slide-in-text {
+            0% {
+                opacity: 0;
+                transform: translateX(-100%);
+            }
+            100% {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+    </style>
+    <title>KJSIT Virtual Labs</title>
+</head>
+<body>
+    <div class="box">
+        <p class="para"><u><b>Welcome to K.J. Somaiya Institute Of Technology Virtual Lab</b></u></p>
+        <br>
+        <img src="./weeeeee.jpg" id="imagee" alt="Lab Image">
+        <div class="regdet">
+            <form method="post" action="process.php">
+                <label for="username"><b>Username</b></label><br>
+                <input type="text" placeholder="Enter username" name="username" required>
+                <br>
+                <label for="email" class="email"><b>Email</b></label><br>
+                <input type="text" placeholder="Enter Email" name="email" required>
+                <br>
+                <label for="psw"><b>Password</b></label><br>
+                <input type="password" placeholder="Enter Password" name="psw" required>
+                <br>
+                <label>
+                    <input type="checkbox" checked="checked" name="remember" style="margin-bottom:15px"> Remember me
+                </label>
+                <div class="clearfix">
+                    <button type="submit" class="signupbtn"><a href="index.html">Sign Up</a></button>
+                    <button type="button" class="loginbtn">Login</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
