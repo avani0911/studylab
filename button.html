@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@1,600&display=swap"
+      rel="stylesheet"
+    />
+    <title>Stack implementation</title>
+    <style>
+        body {
+        background-image: url("white-triangle-pattern-seamless-background-3-cover.jpg");
+        background-size: auto;
+        background-repeat: repeat-y repeat-y repeat-y repeat-x;
+        background-color: #f5f6f6;
+        color: black;   
+        font-family: "Poppins", sans-serif;
+      }
+      nav {
+        
+        font-size: 25px;
+        box-shadow: 0 20px 0px 0 #dc3545;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        height: 110px;
+        background-color:#f5f6f6;
+      }
+      .left {
+        padding-top: 8px;
+      }
+      nav ul {
+        display: flex;
+        justify-content: center;
+      }
+      nav ul li {
+        list-style: none;
+        margin: 0 25px;
+      }
+      nav ul li a {
+        text-decoration: none;
+        color: black;
+      }
+      nav ul li a:hover {
+        color: #cdc2ae;
+        
+      }
+      ul li ul.dropdown li{
+        padding-top: 10px;
+        padding-bottom: 10px;
+        font-size: 25px;
+        display: block;
+      }
+      ul li ul.dropdown{
+        width: 250px;
+        background: #bb433c;
+        position: absolute;
+        min-width: 160px;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        padding-left: 10px;
+        padding-top: 10px;
+        padding-right: 20px;
+        padding-bottom: 10px;
+        z-index: 1;
+        display: none;
+        
+      }
+      .dropdown a:hover{
+        color: #93332e;
+        background-color: cornsilk;
+        display: block;
+        width: 100%;
+        padding:10px;
+      }
+      ul li a:hover{
+        font-size: 25px;
+      }
+      ul li:hover ul.dropdown{
+        display: block;
+      }
+      .dropdown hr{
+        color: cornsilk;
+      }
+
+        .container {
+            top: 60%;
+            left: 50%;
+            display: flex;
+            justify-content:center ;
+            align-items: center;
+            width: 80%;
+            padding:80px;
+            margin-left: 4%;
+        }
+
+        .push-section, .stack-section, .functions-section {
+            text-align: center;
+            padding: 20px;
+            background-color:#93332e ;
+            border: 2px solid #f5f6f6;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            flex-grow: 1;
+            margin: 10px;
+        }
+
+        .stack {
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Center-align the stack boxes */
+            justify-content: flex-end; /* Align the boxes to the bottom of the stack section */
+        }
+
+        /* Update the width property to triple the width */
+        .stack-box {
+            width: 300px; /* Triple the width */
+            height: 60px;
+            border: 2px solid #dc3545;
+            border-radius: 5px;
+            background-color: #ffffff;
+            color:#dc3545 ;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 5px;
+            position: relative;
+        }
+
+        .button-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        input[type="text"] {
+            padding: 5px;
+            border: 2px solid #dc3545 ;
+        }
+
+        button {
+            padding: 15px 30px;
+            background-color:#dc3545;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        button:hover {
+            background-color: #93332e;
+        }
+
+        .popped-box {
+            width: 100px;
+            height: 40px;
+            border: 2px solid #dc3545;
+            border-radius: 5px;
+            background-color: #f5f6f6;
+            color:#dc3545;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 5px;
+            margin-left: 2%;
+        }
+
+        .actions-box {
+            margin-left: 3%;
+            margin-top: 1px;
+            width: 90%;
+            height: 60px;
+            border: 2px solid #dc3545;
+            border-radius: 5px;
+            background-color: #dc3545;
+            color: #f5f6f6;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            font-size: 18px;
+        }
+
+        .element-enter {
+            animation: enterAnimation 0.5s;
+        }
+
+        .element-pop {
+            animation: popAnimation 0.5s;
+        }
+      * {
+        padding: 0px;
+        margin: 0px;
+      }
+      body {
+        background-color:#f5f6f6;
+        color: white;
+        font-family: "Poppins", sans-serif;
+      }
+     
+      html {
+        scroll-behavior: smooth;
+        scroll-padding: 10rem;
+      }
+      .footer {
+        background-image: url("white-triangle-pattern-seamless-background-3-cover.jpg");
+        background-size: auto;
+        height: 350px;
+        background-color: #f5f6f6;
+        margin: auto;
+      }
+      .footer h1 {
+        margin-left: 82px;
+        border: solid  #f5f6f6;
+        border-width: 35px;
+        font-size: 35px;
+        color: #dc3545;
+      }
+      .footer h2 {
+        font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+          "Lucida Sans", Arial, sans-serif;
+        margin-left: 82px;
+        border: solid  #f5f6f6;
+        border-width: 5px;
+        font-size: 25px;
+        color: #dc3545;
+      }
+      .footer h2 a {
+        text-decoration: none;
+        color: #dc3545;
+      }
+      .footer h2 a:hover {
+        color: #dc3545;
+        font-size: 1.6rem;
+      }
+      .footer img {
+        float: right;
+        margin-right: 50px;
+        margin-top: -90px;
+      }
+      .footer1{
+        height: 100px;
+        background-color: #dc3545;
+      }
+      .text{
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        padding-top: 30px;
+        
+      }
+
+        @keyframes enterAnimation {
+            0% {
+                transform: translateY(-100%);
+            }
+            100% {
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes popAnimation {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(0);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="left" style="color:white"><img src="lg.png" alt="logo" width="75%"></div>
+            <div class="right">
+              <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="./book.html">Books</a></li>
+                <li><a href="#">Labs</a>
+                <ul class="dropdown">
+                  <li><a href="lab.html">Stacks</a></li>
+                  <hr>
+                  <li><a href="queuetheory.html">Queue</a></li>
+                  <hr>
+                  <li><a href="circular queue theory.html">Circular Queue</a></li>
+                  <hr>
+                  <li><a href="tree theory.html">Trees</a></li>
+                  <hr>
+                  <li><a href="quizes.html">Quizes</a></li>
+                  <hr>
+                  <li><a href="#">Feedback</a></li>
+                  </ul>
+                </li>
+                <li><a href="#cu">Contact Us</a></li>
+              </ul>
+            </div>
+        </nav>
+      </header>
+    <div class="container">
+        <div class="push-section">
+            <h2>Push Element</h2>
+            <div class="button-container">
+                <input type="text" id="element-input" placeholder="Element to push">
+                <button onclick="pushElement()">Push</button>
+            </div>
+        </div>
+        <div class="stack-section">
+            <h2>Stack (Last In First Out)</h2>
+            <div class="stack" id="stack">
+                <!-- Stack boxes will be displayed here -->
+            </div>
+        </div>
+        <div class="functions-section">
+            <div class="function-box">
+                <h2>Pop Element</h2>
+                <button onclick="popElement()" style="width: 120px; height: 60px;">Pop</button>
+            </div>
+            <div class="function-box">
+                <h2>Peek Element</h2>
+                <button onclick="peekElement()" style="width: 120px; height: 60px;">Peek</button>
+            </div>
+            <div class="popped-box" id="popped-element-box">
+                <!-- Popped element will be displayed here -->
+            </div>
+        </div>
+    </div>
+    <div class="actions-box" id="actions-box">
+        <!-- Actions will be displayed here -->
+    </div>
+    <footer>
+        <div class="footer" id="cu">
+          <div class="cu"><h1>Contact us</h1></div>
+          <a href="https://kjsit.somaiya.edu.in/en" alt="site"
+            ><img src="./lg.png" alt="logo" width="400px"
+          /></a>
+          <div class="Add">
+            <h2>
+              <a
+                href="https://www.google.com/maps/dir/19.271548,72.9637728/sion+kj+somaiya+address/@19.1710393,72.8572708,14z/data=!4m9!4m8!1m1!4e1!1m5!1m1!1s0x3be7cf21727f6e19:0x473006136ad440dc!2m2!1d72.8710809!2d19.046058?entry=ttu"
+                alt="add"
+                >Address:KJ Somaiya Institute of technology<br />Somaiya Ayurvihar
+                Complex,<br />
+                Eastern Express Highway, Near Everard Nagar,<br />
+                Mumbai, Maharashtra 400022<br />India.
+              </a>
+            </h2>
+          </div>
+        </div>
+        <div class="footer1">
+          <div class="text">
+          <h2>Developed by Aanchal Mehta , Avani Mahadik , Sahil Mane , Dhruv Mistry<h2>
+        </div>
+      </div>
+      </footer>
+   
+
+    <script>
+        const stack = [];
+        const maxStackSize = 5;
+        const actions = [];
+
+        function renderStack() {
+            const stackContainer = document.getElementById("stack");
+            stackContainer.innerHTML = "";
+
+            for (let i = stack.length - 1; i >= 0; i--) {
+                const element = stack[i];
+                const stackBox = document.createElement("div");
+                stackBox.className = "stack-box";
+                stackBox.textContent = element;
+                if (i === stack.length - 1) {
+                    stackBox.classList.add("element-enter");
+                }
+                stackContainer.appendChild(stackBox);
+            }
+        }
+
+        function pushElement() {
+            if (stack.length < maxStackSize) {
+                const elementInput = document.getElementById("element-input");
+                const element = elementInput.value;
+                if (element) {
+                    stack.push(element);
+                    elementInput.value = "";
+                    actions.push(`Pushed element ${element}`);
+                    renderStack();
+                    updateActionsBox();
+                }
+            } else {
+                actions.push("Stack overflow - Cannot push more elements.");
+                updateActionsBox();
+            }
+        }
+
+        function popElement() {
+            if (stack.length > 0) {
+                const poppedElement = stack.pop();
+                actions.push(`Popped element ${poppedElement}`);
+                renderStack();
+                updateActionsBox();
+
+                const poppedElementBox = document.getElementById("popped-element-box");
+                poppedElementBox.textContent = poppedElement;
+
+                // Add a delay before removing the "element-pop" class to keep the popped element visible
+                setTimeout(() => {
+                    poppedElementBox.classList.remove("element-pop");
+                }, 500); // Adjust the duration to match your animation duration in milliseconds
+            } else {
+                actions.push("Stack underflow - Cannot pop an empty stack.");
+                updateActionsBox();
+            }
+        }
+
+        function peekElement() {
+            if (stack.length > 0) {
+                alert("Top element: " + stack[stack.length - 1]);
+            } else {
+                alert("Stack is empty");
+            }
+        }
+
+        function updateActionsBox() {
+            const actionsBox = document.getElementById("actions-box");
+            actionsBox.textContent = actions.join(' | ');
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@1,600&display=swap"
+      rel="stylesheet"
+    />
+    <title>Stack</title>
+    <style>* {
+        padding: 0px;
+        margin: 0px;
+      }
+      body {
+        background-image: url("white-triangle-pattern-seamless-background-3-cover.jpg");
+        background-size: auto;
+        background-repeat: repeat-y repeat-y repeat-y repeat-x;
+        background-color: #f5f6f6;
+        color: black;   
+        font-family: "Poppins", sans-serif;
+      }
+      nav {
+       
+        font-size: 25px;
+        box-shadow: 0 20px 0px 0 #dc3545;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        height: 110px;
+        background-color: #f5f6f6;
+      }
+      .left {
+        padding-top: 8px;
+      }
+      nav ul {
+        display: flex;
+        justify-content: center;
+      }
+      nav ul li {
+        list-style: none;
+        margin: 0 25px;
+      }
+      nav ul li a {
+        text-decoration: none;
+        color: black;
+      }
+      nav ul li a:hover {
+        color: #cdc2ae;
+        
+      }
+      ul li ul.dropdown li{
+        padding-top: 10px;
+        padding-bottom: 10px;
+        font-size: 25px;
+        display: block;
+      }
+      ul li ul.dropdown{
+        width: 250px;
+        background: #bb433c;
+        position: absolute;
+        min-width: 160px;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        padding-left: 10px;
+        padding-top: 10px;
+        padding-right: 20px;
+        padding-bottom: 10px;
+        z-index: 1;
+        display: none;
+        
+      }
+      .dropdown a:hover{
+        color: #93332e;
+        background-color: cornsilk;
+        display: block;
+        width: 100%;
+        padding:10px;
+      }
+      ul li a:hover{
+        font-size: 25px;
+      }
+      ul li:hover ul.dropdown{
+        display: block;
+      }
+      .dropdown hr{
+        color: cornsilk;
+      }
+      
+      .head{
+        margin-top:40px ;
+        margin-bottom: 18px;
+        align-items:center;
+        text-align: center;
+    
+   }
+      .head h2{
+        align-items: center;
+        align-content: center;
+        font-size: 2rem;
+     }
+      #watermark {
+        position: fixed;
+        bottom: 5px;
+        right: 5px;
+        opacity: 50;
+        z-index: 99;
+        margin-right: 50px;
+        margin-bottom: 15px;
+      }
+      .footer{
+        background-image: url("white-triangle-pattern-seamless-background-3-cover.jpg");
+        background-size: auto;
+        height: 350px;
+        background-color:  #f5f6f6;
+        margin: auto;
+      }
+      .footer h1 {
+        margin-left: 82px;
+        border: solid  #f5f6f6;
+        border-width: 35px;
+        font-size: 35px;
+        color: #dc3545;
+      }
+      .footer h2 {
+        font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+          "Lucida Sans", Arial, sans-serif;
+        margin-left: 82px;
+        border: solid #f5f6f6;
+        border-width: 5px;
+        font-size: 25px;
+        color: #dc3545;
+      }
+      .footer h2 a {
+        text-decoration: none;
+        color: #dc3545;
+      }
+      .footer h2 a:hover {
+        color: #dc3545;
+        font-size: 1.6rem;
+      }
+      .footer img {
+        float: right;
+        margin-right: 50px;
+        margin-top: -90px;
+      }
+      .footer1{
+        height: 100px;
+        background-color: #dc3545;
+      }
+      .text{
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        padding-top: 30px;
+        
+      }
+      html {
+        scroll-behavior: smooth;
+        scroll-padding: 10rem;
+      }
+      main hr {
+        border: 0;
+        background-color: #dc3545;
+        height: 1.5px;
+        margin-top: 40px;
+        margin-bottom: 40px;
+        margin-left: 40px;
+        margin-right: 40px;
+      }
+      .content{
+        margin-left:90px;
+        margin-right:90px;
+        margin-bottom:40px; 
+      }
+      .pricing-container{
+       
+        align-items: center;
+        text-align: center;
+        margin-left:200px;
+      display: flex;
+      flex-direction: row;
+      height: 50vh; 
+    }
+    .pricing-plan{
+      padding: 20px;
+      margin: 10px;
+      background-color:#dc3545 ;
+      border-radius: 20px;
+      display:flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+  
+    }
+    .plan-button{
+    
+      
+      height: 70px; width: 190px;
+      border-radius: 60px;
+      border-color:white;
+      margin-bottom:10px ;
+    }
+    .plan button a{
+      text-decoration: none;
+      color: black;
+    }
+   
+    .plan-price h1{
+      margin-bottom: 50px;
+    }
+    .plan-price h1{
+      margin-bottom: 50px;
+    }
+    .pricing-container2{
+       
+       align-items: center;
+       text-align: center;
+       margin-left:50px;
+     display: flex;
+     flex-direction: row;
+     height: 50vh; 
+   }
+   .pricing-plan2{
+     padding: 20px;
+     margin: 10px;
+     background-color:#dc3545 ;
+     border-radius: 20px;
+     display:flex;
+     flex-direction: column;
+     justify-content: center;
+     align-items: center;
+ 
+   }
+   .plan-button2{
+   
+    
+     height: 70px; width: 190px;
+     border-radius: 60px;
+     border-color:white;
+     margin-bottom:10px ;
+   }
+  
+   .plan-price2 h1{
+     margin-bottom: 50px;
+   }
+
+    </style>
+  </head>
+  <body>
+    <header>
+      <nav>
+        <div class="left" style="color:white"><img src="lg.png" alt="logo" width="75%"></div>
+        <div class="right">
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="./book.html">Books</a></li>
+            <li><a href="#">Labs</a>
+            <ul class="dropdown">
+              <li><a href="lab.html">Stacks</a></li>
+              <hr>
+              <li><a href="queuetheory.html">Queue</a></li>
+              <hr>
+              <li><a href="circular queue theory.html">Circular Queue</a></li>
+              <hr>
+              <li><a href="tree theory.html">Trees</a></li>
+              <hr>
+              <li><a href="quizes.html">Quizes</a></li>
+              <hr>
+              <li><a href="#">Feedback</a></li>
+              </ul>
+            </li>
+            <li><a href="#cu">Contact Us</a></li>
+          </ul>
+        </div>
+      </nav>
+    </header>
+    <div id="watermark">
+        <a href="https://kjsit.somaiya.edu.in/en" alt="nsite"
+          ><img
+            src="logonew-removebg-preview.png"
+            alt="slogo"
+            width="150px"
+        /></a>
+      </div>
+<main>
+  <div class="head">
+    <h2>Let's Understand Stacks</h2>
+  </div> 
+  <hr>
+  <div class="content">
+    <p>
+      Stack is a linear data structure that follows a particular order in which the operations are performed. The order may be LIFO(Last In First Out).
+      LIFO implies that the element that is inserted last. In computer science, a stack is an abstract data type that serves as a collection of elements, with two main operations:</p>
+      <p>
+       <ol><br>
+           <li> Push, which adds an element to the collection</li>
+           <li>Pop, which removes the most recently added element that was not yet removed</li>
+           <li>A peek operation can, without modifying the stack, return the value of the last element added.</li>
+       </ol><br></p>
+       <p>
+       Considered as a linear data structure, or more abstractly a sequential collection, the push and pop operations occur only at one end of the structure, referred to as the top of the stack. 
+       This data structure makes it possible to implement a stack as a singly linked list and as a pointer to the top element.
+      </p><br>
+      <h3>WHAT IS STACK OVERFLOW AND STACK UNDERFLOW?</h3> <br>
+      <p>
+          A stack may be implemented to have a bounded capacity. If the stack is full and does not contain enough space to accept another element, the stack is in a state of stack overflow.
+          <br>
+          Stack underflow happens when we try to pop (remove) an item from the stack, when nothing is actually there to remove. 
+      </div>
+      </body>
+  </p>
+  </div>
+ <hr>
+ <div class="pricing-container">
+  <div class="pricing-plan">
+    <div class="plan-title"><h2>Let's simulate</h2></div>
+    <div class="plan-price"><h1>Stack Implementation</h1></div>
+    <button class="plan-button"><h3><a href="button.html">Click Here</a></h3>
+  </div>
+  <div class="pricing-container2">
+    <div class="pricing-plan2">
+      <div class="plan-title2"><h2>Quiz Time!</h2></div>
+      <div class="plan-price2"><h1>stack Implementation</h1></div>
+      <button class="plan-button2"><h3><a href="stack quiz.html">Click Here</a></h3>
+    </div>
+  <hr/>
+</main>
+
+
+      <footer>
+        <hr style="color: #dc3545"/>
+        <div class="footer" id="cu">
+          <div class="cu"><h1>Contact us</h1></div>
+          <a href="https://kjsit.somaiya.edu.in/en" alt="site"
+            ><img src="./lg.png" alt="logo" width="400px"
+          /></a>
+          <div class="Add">
+            <h2>
+              <a
+                href="https://www.google.com/maps/dir/19.271548,72.9637728/sion+kj+somaiya+address/@19.1710393,72.8572708,14z/data=!4m9!4m8!1m1!4e1!1m5!1m1!1s0x3be7cf21727f6e19:0x473006136ad440dc!2m2!1d72.8710809!2d19.046058?entry=ttu"
+                alt="add"
+                >Address:KJ Somaiya Institute of technology<br />Somaiya Ayurvihar
+                Complex,<br />
+                Eastern Express Highway, Near Everard Nagar,<br />
+                Mumbai, Maharashtra 400022<br />India.
+              </a>
+            </h2>
+          </div>
+        </div>
+        <div class="footer1">
+          <div class="text">
+          <h2>Developed by Aanchal Mehta , Avani Mahadik , Sahil Mane , Dhruv Mistry<h2>
+        </div>
+      </div>
+      </footer>
+    </body>
+</html>

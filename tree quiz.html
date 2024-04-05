@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@1,600&display=swap" rel="stylesheet" />
+    <title>Tree Quiz</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            padding: 0px;
+            margin: 0px;
+        }
+
+        body {
+            background-image: url("white-triangle-pattern-seamless-background-3-cover.jpg");
+            background-size: auto;
+            background-repeat: repeat-y repeat-y repeat-y repeat-x;
+            background-color: #f5f6f6;
+            color: black;
+            font-family: "Poppins", sans-serif;
+        }
+
+        nav {
+            font-size: 25px;
+            box-shadow: 0 20px 0px 0 #dc3545;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            height: 110px;
+            background-color: #f5f6f6;
+        }
+
+        .left {
+            padding-top: 8px;
+        }
+
+        nav ul {
+            display: flex;
+            justify-content: center;
+        }
+
+        nav ul li {
+            list-style: none;
+            margin: 0 25px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: black;
+        }
+
+        nav ul li a:hover {
+            color: #cdc2ae;
+        }
+
+        ul li ul.dropdown li {
+            padding-top: 10px;
+            padding-bottom: 10px;
+            font-size: 25px;
+            display: block;
+        }
+
+        ul li ul.dropdown {
+            width: 250px;
+            background: #bb433c;
+            position: absolute;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+            padding-left: 10px;
+            padding-top: 10px;
+            padding-right: 20px;
+            padding-bottom: 10px;
+            z-index: 1;
+            display: none;
+        }
+
+        .dropdown a:hover {
+            color: #93332e;
+            background-color: cornsilk;
+            display: block;
+            width: 100%;
+            padding: 10px;
+        }
+
+        ul li a:hover {
+            font-size: 25px;
+        }
+
+        ul li:hover ul.dropdown {
+            display: block;
+        }
+
+        .dropdown hr {
+            color: cornsilk;
+        }
+
+        .container {
+            display: block;
+            justify-content: center;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            text-align: left;
+            max-width: 800px; /* Adjusted max-width */
+            width: 90%; /* Adjusted width */
+            margin: 20px auto; /* Centered horizontally */
+        }
+
+        h1 {
+            color: #93332e;
+            margin-bottom: 20px;
+            text-align: center; /* Centered text */
+        }
+
+        .quiz-question {
+            margin-bottom: 20px;
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        button {
+            padding: 12px 20px;
+            background-color: #93332e;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #93332e;
+        }
+
+        .result {
+            margin-top: 20px;
+        }
+
+        .highlight-correct {
+            background-color: #49e949;
+        }
+
+        .highlight-wrong {
+            background-color: #Fa0000;
+        }
+
+        #nextBtn {
+            margin-top: 15px;
+        }
+
+        /* Additional Styles */
+        .chart-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        #myChart {
+            max-width: 400px; /* Adjust the max-width */
+            width: 100%; /* Adjusted width */
+            height: auto; /* Let height adjust automatically */
+        }
+
+        #myChart { 
+            display: none;
+        }
+
+        #attemptAgainBtn,
+        #goBackBtn {
+            margin-top: 15px;
+        }
+        .logout{
+            margin-left: 120px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="left" style="color:white"><img src="lg.png" alt="logo" width="75%"></div>
+            <div class="right">
+              <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="./book.html">Books</a></li>
+                <li><a href="#">Labs</a>
+                <ul class="dropdown">
+                  <li><a href="lab.html" target="_blank">Stacks</a></li>
+                  <hr>
+                  <li><a href="queuetheory.html" target="_blank">Queue</a></li>
+                  <hr>
+                  <li><a href="circular queue theory.html" target="_blank">Circular Queue</a></li>
+                  <hr>
+                  <li><a href="tree theory.html">Trees</a></li>
+                  <hr>
+                  <li><a href="quizes.html" target="_blank">Quizes</a></li>
+                  <hr>
+                  <li><a href="#">Feedback</a></li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+          </nav>
+    </header>
+    <div class="container">
+        <h1>AVL Tree Quiz</h1>
+        <div id="quiz" class="quiz-question"></div>
+        <div class="quiz-options" id="quiz-options"></div>
+        <button onclick="nextQuestion()" id="nextBtn" style="display: none;">Next Question</button>
+        <div class="result" id="result"></div>
+
+        <!-- Chart Container -->
+        <div class="chart-container">
+            <canvas id="myChart" width="400" height="400"></canvas>
+        </div>
+
+        <!-- Attempt Again and Go Back Buttons -->
+        <button id="attemptAgainBtn" onclick="attemptQuizAgain()">Attempt Quiz Again</button>
+        <button id="goBackBtn" onclick="goBack()">Go Back</button>
+    </div>
+
+    <script>
+         const quizData = [
+            {
+                question: 'What is an AVL tree?',
+        options: ['A binary search tree', 'A tree with a fixed size', 'A self-balancing binary search tree', 'A tree with no size limit'],
+        correctAnswer: 'A self-balancing binary search tree'
+            },
+            {
+                question: 'What property distinguishes an AVL tree from a regular binary search tree?',
+        options: ['All nodes have exactly two children', 'All nodes have a balance factor of 0', 'All nodes have a balance factor of either -1, 0, or 1', 'All nodes have a balance factor greater than 1'],
+        correctAnswer: 'All nodes have a balance factor of either -1, 0, or 1'
+            },
+            {
+        question: 'What is the maximum height difference allowed between the left and right subtrees of any node in an AVL tree?',
+        options: ['1', '2', '0', '3'],
+        correctAnswer: '1'
+    },
+    {
+        question: 'Which rotation operation is performed to restore balance in an AVL tree when the balance factor of a node becomes greater than 1?',
+        options: ['Right rotation', 'Left rotation', 'Double rotation', 'No rotation required'],
+        correctAnswer: 'Right rotation'
+    },
+    {
+        question: 'In an AVL tree, what is the height of an empty subtree?',
+        options: ['0', '1', '-1', 'Depends on the implementation'],
+        correctAnswer: '-1'
+    },
+    {
+        question: 'What is the worst-case time complexity of searching for an element in an AVL tree?',
+        options: ['O(log n)', 'O(n)', 'O(n log n)', 'O(1)'],
+        correctAnswer: 'O(log n)'
+    },
+    {
+        question: 'Which of the following operations can cause a tree to become unbalanced in an AVL tree?',
+        options: ['Insertion', 'Deletion', 'Both Insertion and Deletion', 'None of the above'],
+        correctAnswer: 'Both Insertion and Deletion'
+    },
+    {
+        question: 'What is the time complexity of insertion in an AVL tree?',
+        options: ['O(log n)', 'O(n)', 'O(n log n)', 'O(1)'],
+        correctAnswer: 'O(log n)'
+    },
+    {
+        question: 'What is the height of a perfectly balanced AVL tree with 15 nodes?',
+        options: ['3', '4', '5', '6'],
+        correctAnswer: '4'
+    },
+    {
+        question: 'Which traversal method is commonly used to display the elements of an AVL tree in sorted order?',
+        options: ['In-order traversal', 'Pre-order traversal', 'Post-order traversal', 'Level-order traversal'],
+        correctAnswer: 'In-order traversal'
+    },
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+        const quizContainer = document.getElementById('quiz');
+        const optionsContainer = document.getElementById('quiz-options');
+        const resultContainer = document.getElementById('result');
+        const nextButton = document.getElementById('nextBtn');
+        const attemptAgainButton = document.getElementById('attemptAgainBtn');
+        const goBackButton = document.getElementById('goBackBtn');
+        let myChart; // Variable to hold the chart instance
+
+        function loadQuestion() {
+            const currentQuestion = quizData[currentQuestionIndex];
+            quizContainer.textContent = currentQuestion.question;
+            optionsContainer.innerHTML = '';
+            currentQuestion.options.forEach((option, index) => {
+                const optionButton = document.createElement('button');
+                optionButton.textContent = option;
+                optionButton.addEventListener('click', () => checkAnswer(option));
+                optionsContainer.appendChild(optionButton);
+            });
+        }
+
+        function checkAnswer(selectedOption) {
+            const currentQuestion = quizData[currentQuestionIndex];
+            const options = optionsContainer.getElementsByTagName('button');
+
+            for (let i = 0; i < options.length; i++) {
+                options[i].disabled = true;
+                if (options[i].textContent === currentQuestion.correctAnswer) {
+                    options[i].classList.add('highlight-correct');
+                } else if (options[i].textContent === selectedOption) {
+                    options[i].classList.add('highlight-wrong');
+                }
+            }
+
+            if (selectedOption === currentQuestion.correctAnswer) {
+                score++;
+            }
+
+            nextButton.style.display = 'block';
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < quizData.length) {
+                resetOptions();
+                loadQuestion();
+                nextButton.style.display = 'none';
+            } else {
+                showResult();
+            }
+        }
+
+        function showResult() {
+            resultContainer.textContent = `Quiz completed! Your Score: ${score}/${quizData.length}`;
+
+            // Create a pie chart
+            const ctx = document.getElementById('myChart').getContext('2d');
+            myChart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: ['Correct', 'Incorrect'],
+                    datasets: [{
+                        data: [score, quizData.length - score],
+                        backgroundColor: ['#8FEE8F', '#FF8F8F']
+                    }]
+                }
+            });
+
+            // Show only the chart
+            document.getElementById('myChart').style.display = 'block';
+            attemptAgainButton.style.display = 'block';
+            goBackButton.style.display = 'block';
+            quizContainer.style.display = 'none';
+            optionsContainer.style.display = 'none';
+            nextButton.style.display = 'none';
+            resultContainer.style.display = 'none';
+        }
+
+        function resetOptions() {
+            const options = optionsContainer.getElementsByTagName('button');
+            for (let i = 0; i < options.length; i++) {
+                options[i].classList.remove('highlight-correct', 'highlight-wrong');
+                options[i].disabled = false;
+            }
+        }
+
+        function attemptQuizAgain() {
+            // Hide chart and buttons
+            window.location.href = 'stack quiz.html';
+            document.getElementById('myChart').style.display = 'none';
+            attemptAgainButton.style.display = 'none';
+            goBackButton.style.display = 'none';
+
+            // Reset quiz variables
+            currentQuestionIndex = 0;
+            score = 0;
+            resetOptions();
+
+            // Remove previous chart if it exists
+            if (myChart) {
+                myChart.destroy();
+            }
+
+            // Load the first question
+            loadQuestion();
+
+            // Hide result text
+            resultContainer.textContent = '';
+        }
+
+        function goBack() {
+            // Redirect to the previous page
+            window.location.href = 'quizes.html'; // Replace with the actual URL
+        }
+
+        // Initial load
+        loadQuestion();
+    </script>
+
+</body>
+</html>
+
+    
+    
